@@ -3,5 +3,12 @@ services:
     image: ghcr.io/jsr-mario/jsr-mario-portafolio:main
     build: .
     restart: unless-stopped
-    ports:
-      - "8085:80"
+
+  cloudflared:
+    image: cloudflare/cloudflared:latest
+    restart: unless-stopped
+    command: tunnel --no-autoupdate run
+    environment:
+      TUNNEL_TOKEN: ${CLOUDFLARE_TUNNEL_TOKEN}
+    depends_on:
+      - portfolio
