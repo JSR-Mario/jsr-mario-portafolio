@@ -1,0 +1,19 @@
+# Environment variables
+.env
+
+# OS / Editor files
+.DS_Store
+*.swp
+
+# LaTeX build artifacts
+cv/*.aux
+cv/*.log
+cv/*.bcf
+cv/*.bbl
+cv/*.blg
+cv/*.fdb_latexmk
+cv/*.fls
+cv/*.out
+cv/*.run.xml
+cv/*.xdv
+cv/*.synctex.gz
