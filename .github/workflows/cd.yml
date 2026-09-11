@@ -43,26 +43,16 @@ jobs:
           labels: ${{ steps.meta.outputs.labels }}
 
   deploy:
-    name: Deploy to EC2
+    name: Deploy to Local Server
     needs: build-and-push
-    runs-on: ubuntu-latest
+    runs-on: self-hosted
     steps:
-      - name: Deploy to EC2
-        uses: appleboy/ssh-action@v1.0.3
-        with:
-          host: ${{ secrets.EC2_HOST }}
-          username: ${{ secrets.EC2_USERNAME }}
-          key: ${{ secrets.EC2_SSH_KEY }}
-          script: |
-            # Create directory if it doesn't exist
-            if [ ! -d "jsr-mario-portafolio" ]; then
-              git clone https://github.com/JSR-Mario/jsr-mario-portafolio.git
-            fi
-            cd jsr-mario-portafolio
-            git fetch origin
-            git checkout main
-            git reset --hard origin/main
-            echo "CLOUDFLARE_TUNNEL_TOKEN=${{ secrets.CLOUDFLARE_TUNNEL_TOKEN }}" > .env
-            docker compose down
-            docker compose pull
-            docker compose up -d
+      - name: Deploy Containers
+        run: |
+          cd /home/jsr-mario/jsr-mario-portafolio
+          git fetch origin
+          git checkout main
+          git reset --hard origin/main
+          docker compose pull
+          docker compose up -d
+          docker image prune -f
